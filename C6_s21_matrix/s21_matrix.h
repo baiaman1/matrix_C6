@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include <check.h>
 
 #define SUCCESS 1
 #define FAILURE 0
@@ -32,3 +34,6 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result);
 // helpers
 void print_matrix(matrix_t *mat);
 void fill_rand(matrix_t *mat);
+int valid_in(matrix_t *mat);
+// sum(type1) || sub(type2)
+int cycle_su(matrix_t *A, matrix_t *B, matrix_t *result, int type);

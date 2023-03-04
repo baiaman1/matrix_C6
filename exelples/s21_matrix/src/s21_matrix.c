@@ -106,6 +106,7 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
     return res;
 }
 
+// memory test fail
 int s21_determinant(matrix_t *A, double *result) {
     int res = 0;
     if (!matrix_not_null(A) || result == NULL) {

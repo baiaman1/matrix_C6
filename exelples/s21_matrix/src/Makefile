@@ -28,10 +28,6 @@ s21_matrix.o: $(SRC)
 s21_matrix_verter.o: $(SRC)
 	$(CC) $(CFLAGS) -c $^
 
-# debug: $(SRC)
-# 	$(CC) $(CFLAGS) $^ main.c
-# 	./a.out
-
 clean:
 	rm -rf *.o
 	rm -rf *.gc*
