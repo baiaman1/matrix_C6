@@ -51,3 +51,29 @@ int cycle_su(matrix_t *A, matrix_t *B, matrix_t *result, int type) {
   }
   return res;
 }
+
+// Получить минор зад-го элемента
+int get_minor_ij(int row, int column, matrix_t *A, matrix_t *result) {
+  int err = 1;
+  if (A->matrix != NULL) {
+    err = s21_create_matrix(A->rows - 1, A->columns - 1, result);
+    if (err == 0) {
+      for (int i = 0; i < A->rows; i++) {
+        int tmp_row = i;
+        if (i > row - 1) {
+          tmp_row--;
+        }
+        for (int j = 0; j < A->columns; j++) {
+          int tmp_col = j;
+          if (j > column - 1) {
+            tmp_col--;
+          }
+          if (i != row - 1 && j != column - 1) {
+            result->matrix[tmp_row][tmp_col] = A->matrix[i][j];
+          }
+        }
+      }
+    }
+  }
+  return err;
+}
