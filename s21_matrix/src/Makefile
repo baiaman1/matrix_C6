@@ -4,7 +4,7 @@ OBJ=s21_matrix.o
 CFLAGS=-Wall -Werror -Wextra
 TESTFLAGS=-lcheck -lm -lpthread -lgcov
 
-all: s21_matrix.o test gcov_report s21_matrix.a check
+all: s21_matrix.o test gcov_report s21_matrix.a 
 
 gcov_report: s21_matrix.o test
 	mkdir report

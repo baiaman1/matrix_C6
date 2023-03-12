@@ -54,24 +54,6 @@ int s21_eq_matrix(matrix_t *A, matrix_t *B) {
   return (!res) ? SUCCESS : FAILURE;
 }
 
-// перебор для сложения и вычитания
-int cycle_su(matrix_t *A, matrix_t *B, matrix_t *result, int type) {
-  int res = 0;
-  if (!valid_in(A) || !valid_in(B)) {
-    res = 1;
-  } else if (A->columns != B->columns || A->rows != B->rows) {
-    res = 2;
-  } else {
-    s21_create_matrix(A->rows, A->columns, result);
-    for (int i = 0; i < A->rows; i++) {
-      for (int j = 0; j < A->columns; j++) {
-        result->matrix[i][j] = A->matrix[i][j] + B->matrix[i][j] * type;
-      }
-    }
-  }
-  return res;
-}
-
 // Сложение
 int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
   return cycle_su(A, B, result, 1);
@@ -127,32 +109,6 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < A->columns; j++) {
         result->matrix[j][i] = A->matrix[i][j];
-      }
-    }
-  }
-  return res;
-}
-
-// Получить минор зад-го элемента
-int get_minor_ij(int row, int column, matrix_t *A, matrix_t *result) {
-  int res = 1;
-  if (A->matrix != NULL) {
-    res = s21_create_matrix(A->rows - 1, A->columns - 1, result);
-    if (res == 0) {
-      for (int i = 0; i < A->rows; i++) {
-        int tmp_row = i;
-        if (i > row - 1) {
-          tmp_row--;
-        }
-        for (int j = 0; j < A->columns; j++) {
-          int tmp_col = j;
-          if (j > column - 1) {
-            tmp_col--;
-          }
-          if (i != row - 1 && j != column - 1) {
-            result->matrix[tmp_row][tmp_col] = A->matrix[i][j];
-          }
-        }
       }
     }
   }
@@ -232,12 +188,58 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
   return res;
 }
 
+// ------------helpers--------------helpers------------------helpers--------
+
 // Проверка на матицы на правильность
 int valid_in(matrix_t *mat) {
   int res = 1;
   if (mat == NULL || mat->matrix == NULL || mat->columns <= 0 ||
       mat->rows <= 0) {
     res = 0;
+  }
+  return res;
+}
+
+// перебор для сложения и вычитания
+int cycle_su(matrix_t *A, matrix_t *B, matrix_t *result, int type) {
+  int res = 0;
+  if (!valid_in(A) || !valid_in(B)) {
+    res = 1;
+  } else if (A->columns != B->columns || A->rows != B->rows) {
+    res = 2;
+  } else {
+    s21_create_matrix(A->rows, A->columns, result);
+    for (int i = 0; i < A->rows; i++) {
+      for (int j = 0; j < A->columns; j++) {
+        result->matrix[i][j] = A->matrix[i][j] + B->matrix[i][j] * type;
+      }
+    }
+  }
+  return res;
+}
+
+// Получить минор зад-го элемента
+int get_minor_ij(int row, int column, matrix_t *A, matrix_t *result) {
+  int res = 1;
+  if (A->matrix != NULL) {
+    res = s21_create_matrix(A->rows - 1, A->columns - 1, result);
+    if (res == 0) {
+      for (int i = 0; i < A->rows; i++) {
+        int tmp_row = i;
+        if (i > row - 1) {
+          tmp_row--;
+        }
+        for (int j = 0; j < A->columns; j++) {
+          int tmp_col = j;
+          if (j > column - 1) {
+            tmp_col--;
+          }
+          if (i != row - 1 && j != column - 1) {
+            result->matrix[tmp_row][tmp_col] = A->matrix[i][j];
+          }
+        }
+      }
+    }
   }
   return res;
 }

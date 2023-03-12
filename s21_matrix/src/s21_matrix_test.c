@@ -4,16 +4,14 @@
 
 START_TEST(create_remove_matrix) {
   matrix_t a;
-  //   ck_assert_uint_eq(s21_create_matrix(0, 15, &a), 1);
-  //   s21_remove_matrix(&a);
   ck_assert_uint_eq(s21_create_matrix(15, 15, &a), 0);
   s21_remove_matrix(&a);
-  //   ck_assert_uint_eq(s21_create_matrix(15, -4, &a), 1);
-  //   s21_remove_matrix(&a);
-  //   ck_assert_uint_eq(s21_create_matrix(-7, 0, &a), 1);
-  //   s21_remove_matrix(&a);
   ck_assert_uint_eq(s21_create_matrix(7, 3, &a), 0);
   s21_remove_matrix(&a);
+
+  ck_assert_uint_eq(s21_create_matrix(0, 15, &a), 1);
+  ck_assert_uint_eq(s21_create_matrix(15, -4, &a), 1);
+  ck_assert_uint_eq(s21_create_matrix(-7, 0, &a), 1);
 }
 END_TEST
 
@@ -41,6 +39,22 @@ START_TEST(eq_matrix_2) {
       b.matrix[k][g] = k - g;
     }
   }
+  ck_assert_int_eq(s21_eq_matrix(&a, &b), FAILURE);
+}
+END_TEST
+
+START_TEST(eq_matrix_3) {
+  matrix_t a;
+  s21_create_matrix(3, 3, &a);
+  // s21_create_matrix(3, 3, &b);
+  ck_assert_int_eq(s21_eq_matrix(&a, NULL), FAILURE);
+}
+END_TEST
+
+START_TEST(eq_matrix_4) {
+  matrix_t a, b;
+  s21_create_matrix(3, 3, &a);
+  s21_create_matrix(4, 4, &b);
   ck_assert_int_eq(s21_eq_matrix(&a, &b), FAILURE);
 }
 END_TEST
@@ -89,6 +103,21 @@ START_TEST(sub_matrix) {
   s21_remove_matrix(&a);
   s21_remove_matrix(&b);
   s21_remove_matrix(&result_1);
+  s21_remove_matrix(&result_2);
+}
+END_TEST
+
+START_TEST(sum_sub_error) {
+  matrix_t a = {0}, b = {0}, result_2 = {0};
+  s21_create_matrix(3, 3, &a);
+  s21_create_matrix(4, 4, &b);
+  s21_create_matrix(4, 4, &result_2);
+  a.columns = 3;
+  b.columns = 4;
+  ck_assert_int_eq(s21_sum_matrix(&a, NULL, &result_2), 1);
+  ck_assert_int_eq(s21_sub_matrix(&a, &b, &result_2), 2);
+  s21_remove_matrix(&a);
+  s21_remove_matrix(&b);
   s21_remove_matrix(&result_2);
 }
 END_TEST
@@ -335,7 +364,7 @@ END_TEST
 // результат вашей программы зависит от неинициализированной памяти
 START_TEST(determinant) {
   matrix_t my_mat;
-  double result; // <-- INIT
+  double result;
   s21_create_matrix(4, 4, &my_mat);
   double A[4][4] = {{1, 2, 3, 4}, {2, 3, 4, 5}, {3, 4, 5, 6}, {4, 5, 6, 7}};
   for (int k = 0; k < 4; k++) {
@@ -437,8 +466,11 @@ Suite *s21_matrix_suite(void) {
   tcase_add_test(tcase_core, create_remove_matrix);
   tcase_add_test(tcase_core, eq_matrix_1);
   tcase_add_test(tcase_core, eq_matrix_2);
+  tcase_add_test(tcase_core, eq_matrix_3);
+  tcase_add_test(tcase_core, eq_matrix_4);
   tcase_add_test(tcase_core, sum_matrix);
   tcase_add_test(tcase_core, sub_matrix);
+  tcase_add_test(tcase_core, sum_sub_error);
   tcase_add_test(tcase_core, mult_num_matrix);
   tcase_add_test(tcase_core, mult_matrix_1);
   tcase_add_test(tcase_core, mult_matrix_2);
